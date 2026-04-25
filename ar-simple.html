@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AR - Мебель в комнате</title>
+  
+  <!-- MindAR - библиотека для WebAR -->
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.2/dist/mindar-image-aframe.prod.js"></script>
+  
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      overflow: hidden;
+    }
+    
+    #start-button {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0066cc;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      z-index: 9999;
+      box-shadow: 0 4px 15px rgba(0,102,204,0.4);
+    }
+    
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      z-index: 10000;
+    }
+    
+    #loading h1 {
+      margin-bottom: 20px;
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    #instructions {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 10px;
+      text-align: center;
+      z-index: 9998;
+      max-width: 90%;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Экран загрузки -->
+  <div id="loading">
+    <h1>🪑 Загрузка AR</h1>
+    <div class="spinner"></div>
+    <p style="margin-top: 20px;">Пожалуйста, подождите...</p>
+  </div>
+
+  <!-- Инструкция -->
+  <div id="instructions" style="display: none;">
+    📱 Наведите камеру на ровную поверхность<br>
+    Коснитесь экрана, чтобы разместить мебель
+  </div>
+
+  <!-- Кнопка старта -->
+  <button id="start-button" onclick="startAR()">📷 Запустить AR</button>
+
+  <!-- AR сцена (скрыта до старта) -->
+  <div id="ar-container" style="display: none;">
+    <a-scene
+      mindar-image="imageTargetSrc: 'https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.2/examples/image-tracking/assets/card-example/card.png'; autoStart: false; filterMinCF: 0.0001; filterBeta: 0.001;"
+      color-space="sRGB" 
+      renderer="colorManagement: true, physicallyCorrectLights" 
+      vr-mode-ui="enabled: false" 
+      device-orientation-permission-ui="enabled: false">
+      
+      <a-assets>
+        <a-asset-item id="model" src="model.glb"></a-asset-item>
+      </a-assets>
+
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-gltf-model rotation="0 0 0" position="0 0 0.5" scale="0.005 0.005 0.005" src="#model" animation-mixer></a-gltf-model>
+      </a-entity>
+
+      <a-entity camera></a-entity>
+    </a-scene>
+  </div>
+
+  <script>
+    function startAR() {
+      // Скрываем кнопку и показываем AR
+      document.getElementById('start-button').style.display = 'none';
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('ar-container').style.display = 'block';
+      document.getElementById('instructions').style.display = 'block';
+
+      // Запускаем AR через 1 секунду
+      setTimeout(() => {
+        const scene = document.querySelector('a-scene');
+        if (scene) {
+          scene.setAttribute('mindar-image', 'autoStart', 'true');
+        }
+      }, 1000);
+
+      // Скрываем инструкцию через 5 секунд
+      setTimeout(() => {
+        document.getElementById('instructions').style.display = 'none';
+      }, 5000);
+    }
+
+    // Показываем кнопку когда страница загрузится
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('start-button').style.display = 'block';
+        document.getElementById('instructions').style.display = 'block';
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
