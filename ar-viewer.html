@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D-мебель в AR</title>
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.1.1/model-viewer.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 24px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .viewer-wrapper {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      background: #f5f5f5;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 100%;
+      --poster-color: transparent;
+    }
+
+    .ar-button {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: #0066cc;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(0,102,204,0.4);
+      transition: transform 0.2s;
+    }
+
+    .ar-button:hover {
+      transform: scale(1.05);
+    }
+
+    .ar-button::before {
+      content: "📱";
+    }
+
+    .info {
+      background: #f0f4ff;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    .info h3 {
+      color: #667eea;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .info p {
+      color: #666;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .steps {
+      text-align: left;
+      margin-top: 10px;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: #555;
+    }
+
+    .step-number {
+      background: #667eea;
+      color: white;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 20px; }
+      .viewer-wrapper { height: 300px; }
+      h1 { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🪑 Ваша мебель в AR</h1>
+    <p class="subtitle">Посмотрите, как это будет выглядеть в вашей комнате</p>
+
+    <div class="viewer-wrapper">
+      <model-viewer
+        src="model.glb"
+        alt="3D-модель мебели"
+        ar
+        ar-modes="webxr scene-viewer quick-look"
+        camera-controls
+        auto-rotate
+        shadow-intensity="1"
+        exposure="1"
+        environment-image="neutral">
+        
+        <button slot="ar-button" class="ar-button">
+          Смотреть в AR
+        </button>
+      </model-viewer>
+    </div>
+
+    <div class="info">
+      <h3>📱 Как использовать AR:</h3>
+      <div class="steps">
+        <div class="step">
+          <span class="step-number">1</span>
+          <span>Нажмите синюю кнопку "Смотреть в AR"</span>
+        </div>
+        <div class="step">
+          <span class="step-number">2</span>
+          <span>Разрешите доступ к камере</span>
+        </div>
+        <div class="step">
+          <span class="step-number">3</span>
+          <span>Наведите камеру на пол</span>
+        </div>
+        <div class="step">
+          <span class="step-number">4</span>
+          <span>Коснитесь экрана, чтобы разместить мебель</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Обработка ошибок загрузки модели
+    document.querySelector('model-viewer').addEventListener('error', (e) => {
+      console.error('Ошибка загрузки модели:', e);
+      alert('Ошибка загрузки 3D-модели. Проверьте, что файл model.glb существует.');
+    });
+  </script>
+</body>
+</html>
