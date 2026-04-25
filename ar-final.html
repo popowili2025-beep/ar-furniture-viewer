@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AR - Посмотри мебель в комнате</title>
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.1.1/model-viewer.min.js"></script>
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 24px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 400px;
+      background: #f5f5f5;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      --poster-color: transparent;
+    }
+
+    .ar-button {
+      background: #0066cc;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,102,204,0.4);
+      transition: transform 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ar-button:hover {
+      transform: scale(1.05);
+    }
+
+    .instructions {
+      background: #f0f4ff;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .instructions h3 {
+      color: #667eea;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .instructions ol {
+      margin-left: 20px;
+      color: #555;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .instructions li {
+      margin-bottom: 5px;
+    }
+
+    .note {
+      margin-top: 15px;
+      padding: 10px;
+      background: #fff3cd;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #856404;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🪑 Ваша мебель</h1>
+    <p class="subtitle">Посмотрите в дополненной реальности</p>
+
+    <model-viewer
+      id="viewer"
+      src="model.glb"
+      alt="3D-модель мебели"
+      ar
+      ar-modes="scene-viewer quick-look"
+      camera-controls
+      auto-rotate
+      shadow-intensity="2"
+      exposure="1.2">
+      
+      <button slot="ar-button" class="ar-button">
+        <span>📱</span>
+        <span>Посмотреть в AR</span>
+      </button>
+    </model-viewer>
+
+    <div class="instructions">
+      <h3>📱 Как использовать AR:</h3>
+      <ol>
+        <li>Нажмите синюю кнопку "Посмотреть в AR"</li>
+        <li>Разрешите доступ к камере</li>
+        <li>Наведите камеру на пол или стол</li>
+        <li>Коснитесь экрана, чтобы разместить мебель</li>
+        <li>Вращайте телефон, чтобы осмотреть со всех сторон</li>
+      </ol>
+      <div class="note">
+        💡 <strong>Совет:</strong> Для лучшего результата используйте хорошее освещение
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelector('model-viewer').addEventListener('error', (e) => {
+      console.error('Ошибка:', e);
+    });
+  </script>
+</body>
+</html>
